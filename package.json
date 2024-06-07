@@ -12,6 +12,7 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
+    "payform": "^1.4.0",
     "redom": "^4.1.5"
   }
 }
