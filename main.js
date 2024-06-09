@@ -51,22 +51,50 @@ mount(app, formCaption);
 mount(app, cardTypeImage);
 mount(app, form);
 
+const payForm = document.getElementById("payform");
 const ccnum = document.getElementById("ccnum");
 const expiry = document.getElementById("expiry");
 const cvc = document.getElementById("cvc");
 const email = document.getElementById("email");
 const submit = document.getElementById("submit-btn");
 
+payForm.addEventListener("keyup", (e) => {
+  const validCardNumber = payform.validateCardNumber(ccnum.value);
+  const validCvcNumber = payform.validateCardCVC(cvc.value);
+  const parseCard = payform.parseCardExpiry(expiry.value);
+  const validCardExpiry = payform.validateCardExpiry(
+    parseCard.month,
+    parseCard.year
+  );
+
+  const validEmail = approve.value(email.value, {
+    required: true,
+    email: true,
+  });
+
+  if (
+    validCardExpiry &&
+    validCardNumber &&
+    validCvcNumber &&
+    validEmail.approved
+  ) {
+    submit.classList.remove("disabled");
+    return;
+  }
+
+  submit.classList.add("disabled");
+});
+
 ccnum.addEventListener("input", (e) => {
   updateType(e);
 });
 
 expiry.addEventListener("input", (e) => {
-  console.log(e.target.value);
-  const test2 = payform.parseCardExpiry(e.target.value);
-  const test = payform.validateCardExpiry("05", "25");
-  console.log(test2);
-  console.log(test);
+  const parseCard = payform.parseCardExpiry(e.target.value);
+  const validateCard = payform.validateCardExpiry(
+    parseCard.month,
+    parseCard.year
+  );
 });
 
 email.addEventListener("input", (e) => {
@@ -84,11 +112,11 @@ function checkEmail(e, rules) {
     email.style.textDecoration = "underline";
     email.style.textDecorationColor = "red";
     email.style.textDecorationStyle = "wavy";
-    submit.classList.add("disabled");
     return;
   }
   email.style.textDecoration = "none";
-  submit.classList.remove("disabled");
+
+  return result.approved;
 }
 
 function updateType(e) {
