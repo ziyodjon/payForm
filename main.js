@@ -9,54 +9,54 @@ const cardTypeImage = el("img.card-image", { src: "/default-card.jpg" });
 
 const formCaption = el("h1.form-caption", "Форма для заполнения данных карты");
 
-const form = el("form#payform", { action: "" }, [
-  el("label.input-label", "Номер карты"),
-  el("input#ccnum", {
-    type: "tel",
-    size: 16,
-    inputmode: "numeric",
-    autocomplete: "ccnum",
-    placeholder: "---- ---- ---- ----",
-  }),
-
-  el("label.input-label", "Дата окончания действия карты"),
-  el("input#expiry", {
-    placeholder: "-- / --",
-    size: "7",
-    type: "tel",
-    name: "expiry",
-    value: "",
-  }),
-
-  el("label.input-label", "CVV/CVC"),
-  el("input#cvc", {
-    placeholder: "---",
-    size: "3",
-    type: "tel",
-    name: "cvc",
-    value: "",
-  }),
-
-  el("label.input-label", "E-mail"),
-  el("input#email", { type: "email", placeholder: "username@domain.ru" }),
-
-  el(
-    "button#submit-btn.btn.submit-btn.disabled",
-    { type: "submit", disabled: "disabled" },
-    "Оплатить"
-  ),
-]);
+const payForm = el("form#payform", { action: "" });
+const ccnumLabel = el("label.input-label", "Номер карты");
+const ccnum = el("input#ccnum", {
+  type: "tel",
+  size: 16,
+  inputmode: "numeric",
+  autocomplete: "ccnum",
+  placeholder: "---- ---- ---- ----",
+});
+const experyLabel = el("label.input-label", "Дата окончания действия карты");
+const expiry = el("input#expiry", {
+  placeholder: "-- / --",
+  size: "7",
+  type: "tel",
+  name: "expiry",
+  value: "",
+});
+const cvcLabel = el("label.input-label", "CVV/CVC");
+const cvc = el("input#cvc", {
+  placeholder: "---",
+  size: "3",
+  type: "tel",
+  name: "cvc",
+  value: "",
+});
+const emailLabel = el("label.input-label", "E-mail");
+const email = el("input#email", {
+  type: "email",
+  placeholder: "username@domain.ru",
+});
+const submit = el(
+  "button#submit-btn.btn.submit-btn.disabled",
+  { type: "submit", disabled: "disabled" },
+  "Оплатить"
+);
 
 mount(app, formCaption);
 mount(app, cardTypeImage);
-mount(app, form);
-
-const payForm = document.getElementById("payform");
-const ccnum = document.getElementById("ccnum");
-const expiry = document.getElementById("expiry");
-const cvc = document.getElementById("cvc");
-const email = document.getElementById("email");
-const submit = document.getElementById("submit-btn");
+mount(app, payForm);
+mount(payForm, ccnumLabel);
+mount(payForm, ccnum);
+mount(payForm, experyLabel);
+mount(payForm, expiry);
+mount(payForm, cvcLabel);
+mount(payForm, cvc);
+mount(payForm, emailLabel);
+mount(payForm, email);
+mount(payForm, submit);
 
 const cardMask = { mask: "0000 0000 0000 0000", min: 0, max: 17 };
 const cardExpire = { mask: "00/00" };
@@ -74,8 +74,6 @@ payForm.addEventListener("input", (e) => {
     parseCard.month,
     parseCard.year
   );
-
-  //checkInput(validCardNumber, ccnum);
 
   const validEmail = approve.value(email.value, {
     required: true,
@@ -99,7 +97,6 @@ payForm.addEventListener("input", (e) => {
 submit.setAttribute("disabled", "disabled");
 
 ccnum.addEventListener("input", (e) => {
-  console.log(ccnum.value);
   const validCardNumber = payform.validateCardNumber(ccnumMask.value);
   updateType(e);
   checkInput(validCardNumber, ccnum);
