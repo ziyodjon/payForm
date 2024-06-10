@@ -31,7 +31,7 @@ const form = el("form#payform", { action: "" }, [
   el("label.input-label", "CVV/CVC"),
   el("input#cvc", {
     placeholder: "---",
-    size: "4",
+    size: "3",
     type: "tel",
     name: "cvc",
     value: "",
@@ -42,7 +42,7 @@ const form = el("form#payform", { action: "" }, [
 
   el(
     "button#submit-btn.btn.submit-btn.disabled",
-    { type: "submit" },
+    { type: "submit", disabled: "disabled" },
     "Оплатить"
   ),
 ]);
@@ -58,7 +58,7 @@ const cvc = document.getElementById("cvc");
 const email = document.getElementById("email");
 const submit = document.getElementById("submit-btn");
 
-payForm.addEventListener("keyup", (e) => {
+payForm.addEventListener("input", (e) => {
   const validCardNumber = payform.validateCardNumber(ccnum.value);
   const validCvcNumber = payform.validateCardCVC(cvc.value);
   const parseCard = payform.parseCardExpiry(expiry.value);
@@ -66,6 +66,8 @@ payForm.addEventListener("keyup", (e) => {
     parseCard.month,
     parseCard.year
   );
+
+  //checkInput(validCardNumber, ccnum);
 
   const validEmail = approve.value(email.value, {
     required: true,
@@ -79,22 +81,34 @@ payForm.addEventListener("keyup", (e) => {
     validEmail.approved
   ) {
     submit.classList.remove("disabled");
+    submit.removeAttribute("disabled");
+
     return;
   }
 
   submit.classList.add("disabled");
 });
+submit.setAttribute("disabled", "disabled");
 
 ccnum.addEventListener("input", (e) => {
+  console.log(ccnum.value);
+  const validCardNumber = payform.validateCardNumber(ccnum.value);
   updateType(e);
+  checkInput(validCardNumber, ccnum);
 });
 
 expiry.addEventListener("input", (e) => {
   const parseCard = payform.parseCardExpiry(e.target.value);
-  const validateCard = payform.validateCardExpiry(
+  const validCardExpiry = payform.validateCardExpiry(
     parseCard.month,
     parseCard.year
   );
+  checkInput(validCardExpiry, expiry);
+});
+
+cvc.addEventListener("input", () => {
+  const validCvcNumber = payform.validateCardCVC(cvc.value);
+  checkInput(validCvcNumber, cvc);
 });
 
 email.addEventListener("input", (e) => {
@@ -102,21 +116,29 @@ email.addEventListener("input", (e) => {
     required: true,
     email: true,
   };
-  checkEmail(e, rules);
+  const validEmailResult = checkEmail(e, rules);
+  checkInput(validEmailResult, email);
 });
 
 function checkEmail(e, rules) {
   const result = approve.value(e.target.value, rules);
 
-  if (result.approved == false && email.value.length >= 0) {
-    email.style.textDecoration = "underline";
-    email.style.textDecorationColor = "red";
-    email.style.textDecorationStyle = "wavy";
+  if (result.approved == false) {
+    email.classList.add("email-error");
     return;
   }
-  email.style.textDecoration = "none";
+  email.classList.remove("email-error");
 
   return result.approved;
+}
+
+function checkInput(validInputType, input) {
+  if (!validInputType) {
+    input.classList.add("input-error");
+    return;
+  }
+
+  input.classList.remove("input-error");
 }
 
 function updateType(e) {
@@ -129,7 +151,7 @@ function updateType(e) {
   cardTypeImage.src = `${cardType}.jpg`;
 }
 
-const cardMask = { mask: "0000 0000 0000 0000" };
+const cardMask = { mask: "0000 0000 0000 0000", min: 0, max: 17 };
 const cardExpire = { mask: "00/00" };
 const cardCvc = { mask: "000", lazy: false };
 

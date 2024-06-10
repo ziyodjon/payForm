@@ -1,36 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
-body{
+body {
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   font-style: normal;
 }
 
-#app{
-  width:800px;
-  margin:0 auto;
-  padding:15px;
-  border:1px solid #ccc;
+#app {
+  width: 800px;
+  margin: 0 auto;
+  padding: 15px;
+  border: 1px solid #ccc;
   border-radius: 10px;
-  position:relative;
+  position: relative;
 }
 
-#app .card-image{
+#app .card-image {
   position: absolute;
-  top:13px;
-  right:17px;
-  width:150px;
+  top: 13px;
+  right: 17px;
+  width: 150px;
 }
 
-.input-label{
-  display:block;
-  margin:8px 0px;
+.input-label {
+  display: block;
+  margin: 8px 0px;
 }
 
-input{
+input {
   display: block;
   height: 34px;
-  width:97%;
+  width: 97%;
   padding: 3px 12px;
   font-size: 14px;
   line-height: 1.42857143;
@@ -39,17 +39,33 @@ input{
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s,
+    box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  -webkit-transition: border-color ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+    -webkit-box-shadow ease-in-out 0.15s;
+}
+.email-error {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: color;
+}
+.input-error {
+  background: #f7e8e8;
 }
 
-.btn{
+.input-success {
+  background: #fff;
+}
+
+.btn {
   display: inline-block;
   margin-bottom: 0;
   font-weight: 400;
@@ -61,10 +77,10 @@ input{
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857143;
@@ -75,17 +91,17 @@ input{
   user-select: none;
 }
 
-.submit-btn{
-  width:100%;
-  margin-top:15px;
+.submit-btn {
+  width: 100%;
+  margin-top: 15px;
   color: #fff;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.disabled{
+.disabled {
   cursor: not-allowed;
   filter: alpha(opacity=65);
-  opacity: .65;
+  opacity: 0.65;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
