@@ -58,6 +58,14 @@ const cvc = document.getElementById("cvc");
 const email = document.getElementById("email");
 const submit = document.getElementById("submit-btn");
 
+const cardMask = { mask: "0000 0000 0000 0000", min: 0, max: 17 };
+const cardExpire = { mask: "00/00" };
+const cardCvc = { mask: "000", lazy: false };
+
+const ccnumMask = IMask(ccnum, cardMask);
+const expiryMask = IMask(expiry, cardExpire);
+const cvcMask = IMask(cvc, cardCvc);
+
 payForm.addEventListener("input", (e) => {
   const validCardNumber = payform.validateCardNumber(ccnum.value);
   const validCvcNumber = payform.validateCardCVC(cvc.value);
@@ -92,13 +100,13 @@ submit.setAttribute("disabled", "disabled");
 
 ccnum.addEventListener("input", (e) => {
   console.log(ccnum.value);
-  const validCardNumber = payform.validateCardNumber(ccnum.value);
+  const validCardNumber = payform.validateCardNumber(ccnumMask.value);
   updateType(e);
   checkInput(validCardNumber, ccnum);
 });
 
 expiry.addEventListener("input", (e) => {
-  const parseCard = payform.parseCardExpiry(e.target.value);
+  const parseCard = payform.parseCardExpiry(expiryMask.value);
   const validCardExpiry = payform.validateCardExpiry(
     parseCard.month,
     parseCard.year
@@ -107,7 +115,7 @@ expiry.addEventListener("input", (e) => {
 });
 
 cvc.addEventListener("input", () => {
-  const validCvcNumber = payform.validateCardCVC(cvc.value);
+  const validCvcNumber = payform.validateCardCVC(cvcMask.value);
   checkInput(validCvcNumber, cvc);
 });
 
@@ -150,11 +158,3 @@ function updateType(e) {
 
   cardTypeImage.src = `${cardType}.jpg`;
 }
-
-const cardMask = { mask: "0000 0000 0000 0000", min: 0, max: 17 };
-const cardExpire = { mask: "00/00" };
-const cardCvc = { mask: "000", lazy: false };
-
-IMask(ccnum, cardMask);
-IMask(expiry, cardExpire);
-IMask(cvc, cardCvc);
