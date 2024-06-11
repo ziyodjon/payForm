@@ -29,7 +29,7 @@ const expiry = el("input#expiry", {
 const cvcLabel = el("label.input-label", "CVV/CVC");
 const cvc = el("input#cvc", {
   placeholder: "---",
-  size: "3",
+  //size: "3",
   type: "tel",
   name: "cvc",
   value: "",
@@ -58,40 +58,43 @@ mount(payForm, emailLabel);
 mount(payForm, email);
 mount(payForm, submit);
 
-const cardMask = { mask: "0000 0000 0000 0000", min: 0, max: 17 };
+const cardMask = { mask: "0000 0000 0000 0000" };
 const cardExpire = { mask: "00/00" };
-const cardCvc = { mask: "000", lazy: false };
+const cardCvc = { mask: "000" };
 
 const ccnumMask = IMask(ccnum, cardMask);
 const expiryMask = IMask(expiry, cardExpire);
 const cvcMask = IMask(cvc, cardCvc);
 
-payForm.addEventListener("input", (e) => {
-  const validCardNumber = payform.validateCardNumber(ccnumMask.value);
+let validCardNumber, validCardExpiry, validCvcNumber, validEmailResult;
+
+ccnum.addEventListener("input", (e) => {
+  validCardNumber = payform.validateCardNumber(ccnumMask.value);
+  updateType(e);
+  checkInput(validCardNumber, ccnum);
+});
+
+expiry.addEventListener("input", (e) => {
   const parseCard = payform.parseCardExpiry(expiryMask.value);
-  const validCardExpiry = payform.validateCardExpiry(
-    parseCard.month,
-    parseCard.year
-  );
-  const validCvcNumber = payform.validateCardCVC(cvcMask.value);
-  const validEmailResult = checkEmail(e, {
+  validCardExpiry = payform.validateCardExpiry(parseCard.month, parseCard.year);
+  checkInput(validCardExpiry, expiry);
+});
+
+cvc.addEventListener("input", () => {
+  validCvcNumber = payform.validateCardCVC(cvcMask.value);
+  checkInput(validCvcNumber, cvc);
+});
+
+email.addEventListener("input", (e) => {
+  validEmailResult = checkEmail(e, {
     required: true,
     email: true,
   });
 
-  // Валидация карты
-  updateType(e);
-  checkInput(validCardNumber, ccnum);
-
-  // Валидация срок карты
-  checkInput(validCardExpiry, expiry);
-
-  // Валидация CVC номера
-  checkInput(validCvcNumber, cvc);
-
-  // Валидация E-mail
   checkInput(validEmailResult, email);
+});
 
+payForm.addEventListener("input", (e) => {
   if (
     validCardExpiry &&
     validCardNumber &&
@@ -100,43 +103,10 @@ payForm.addEventListener("input", (e) => {
   ) {
     submit.classList.remove("disabled");
     submit.removeAttribute("disabled");
-
-    return;
+  } else {
+    submit.classList.add("disabled");
   }
-
-  submit.classList.add("disabled");
 });
-
-//submit.setAttribute("disabled", "disabled");
-
-// ccnum.addEventListener("input", (e) => {
-//   const validCardNumber = payform.validateCardNumber(ccnumMask.value);
-//   updateType(e);
-//   checkInput(validCardNumber, ccnum);
-// });
-
-// expiry.addEventListener("input", (e) => {
-//   const parseCard = payform.parseCardExpiry(expiryMask.value);
-//   const validCardExpiry = payform.validateCardExpiry(
-//     parseCard.month,
-//     parseCard.year
-//   );
-//   checkInput(validCardExpiry, expiry);
-// });
-
-// cvc.addEventListener("input", () => {
-//   const validCvcNumber = payform.validateCardCVC(cvcMask.value);
-//   checkInput(validCvcNumber, cvc);
-// });
-
-// email.addEventListener("input", (e) => {
-//   let rules = {
-//     required: true,
-//     email: true,
-//   };
-//   const validEmailResult = checkEmail(e, rules);
-//   checkInput(validEmailResult, email);
-// });
 
 function checkEmail(e, rules) {
   const result = approve.value(e.target.value, rules);
